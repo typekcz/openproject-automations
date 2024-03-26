@@ -1,0 +1,22 @@
+{
+	"name": "openproject-automations",
+	"description": "This project uses OpenProject's API and webhooks to perform automatic actions on projects or work packages.",
+	"license": "ISC",
+	"version": "1.0.0",
+	"author": "Lukáš Kotržena <lkotrzena@gmail.com>",
+	"module": "index.ts",
+	"type": "module",
+	"scripts": {
+		"generate-api-eh": "openapi -i $OPENPROJECT_URL/api/v3/spec.json -o src/openproject-api -c fetch --indent tab --name OpenProjectClient",
+		"generate-api": "openapi-generator-cli generate -g typescript-fetch -i $OPENPROJECT_URL/api/v3/spec.json -o src/openproject-api --skip-validate-spec"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"@openapitools/openapi-generator-cli": "^2.9.0",
+		"@types/bun": "latest",
+		"openapi-typescript-codegen": "^0.27.0"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	}
+}

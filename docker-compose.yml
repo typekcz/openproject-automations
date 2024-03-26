@@ -1,0 +1,9 @@
+version: '3'
+services:
+  openproject-automations:
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      - OPENPROJECT_URL=${OPENPROJECT_URL}
+      - API_KEY=${API_KEY}

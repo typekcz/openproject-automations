@@ -1,0 +1,11 @@
+{
+	// Check "ConfigurationParameters" in "src/openproject-api/runtime.ts:18" for all options
+	"openApi": {
+		"basePath": "http://localhost:8080", // or use OPENPROJECT_URL environment variable
+		"password": "your api key" // or use API_KEY environment variable
+	},
+	"automationsDirs": [
+		"./my-automations"
+	]
+	// Remove comments and rename to "config.json"
+}
