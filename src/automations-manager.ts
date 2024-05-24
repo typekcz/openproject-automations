@@ -11,7 +11,7 @@ export default class AutomationsManager {
 	protected tagsSearchRegExp: RegExp;
 
 	constructor(protected id: string = "openproject-automations"){
-		this.tagsSearchRegExp = new RegExp(`\\[[^\\[]+\\]\\((${escapeRegExp(id)}:.*)\\)`, "gm");
+		this.tagsSearchRegExp = new RegExp(`\\[[^\\[]+\\]\\((${escapeRegExp(id)}:[^)]*)\\)`, "gm");
 	}
 
 	public async registerAutomationsFromDir(dir: string){
