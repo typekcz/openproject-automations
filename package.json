@@ -2,7 +2,7 @@
 	"name": "openproject-automations",
 	"description": "This project uses OpenProject's API and webhooks to perform automatic actions on projects or work packages.",
 	"license": "ISC",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"author": "Lukáš Kotržena <lkotrzena@gmail.com>",
 	"module": "index.ts",
 	"type": "module",
