@@ -1,4 +1,5 @@
 import AbstractAutomation from "./abstract-automation";
+import log from "./logger";
 import openprojectApi from "./openproject-api-gw";
 import { escapeRegExp } from "./utils";
 import type { WebhookBody } from "./webhook-body";
@@ -21,7 +22,7 @@ export default class AutomationsManager {
 				this.registerAutomationFile(dir, file);
 			}
 		} catch(e){
-			console.warn(`Failed to read directory "${dir}" to register automations.`, e);
+			log.warn?.(`Failed to read directory "${dir}" to register automations.`, e);
 		}
 	}
 
@@ -37,14 +38,14 @@ export default class AutomationsManager {
 				let automationInstance = new automation.default();
 				if(automationInstance instanceof AbstractAutomation) {
 					this.registerAutomation(path.name, automationInstance);
-					console.log(`Registered automation "${path.name}" from "${filePath}".`);
+					log.info?.(`Registered automation "${path.name}" from "${filePath}".`);
 				} else
 					throw new Error(`Module's default export class doesn't implement AbstractAutomation.`);
 			} else {
 				throw new Error(`Module's default export is not a constructor.`);
 			}
 		} catch(e){
-			console.error(`Error loading automation "${file}" in "${dir}".`, e);
+			log.error?.(`Error loading automation "${file}" in "${dir}".`, e);
 		}
 	}
 
@@ -59,8 +60,10 @@ export default class AutomationsManager {
 			let params: URLSearchParams = tag.searchParams as URLSearchParams;
 			let automationId = tag.pathname;
 			let automation = this.automations.get(automationId);
-			if(!automation)
+			if(!automation){
+				log.debug?.(`Non-existent automation tag "${automationId}" found on project "${webhookBody.project.name}".`);
 				return;
+			}
 
 			let wpId = "";
 			switch(webhookBody.action){
@@ -75,7 +78,7 @@ export default class AutomationsManager {
 					};
 				}
 			}
-			console.log(`Running "${automationId}" with params "${params.toString()}" on "${webhookBody.action}" for "${webhookBody.project.name}${wpId}"`);
+			log.info?.(`Running "${automationId}" with params "${params.toString()}" on "${webhookBody.action}" for "${webhookBody.project.name}${wpId}"`);
 
 			try {
 				let ret = null;
@@ -96,7 +99,7 @@ export default class AutomationsManager {
 				if(ret instanceof Promise)
 					await ret;
 			} catch(e){
-				console.error(e);
+				log.error?.(e);
 			}
 		}
 	}

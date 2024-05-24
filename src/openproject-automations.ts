@@ -4,6 +4,7 @@ import { PriorityModelFromJSONTyped, ProjectModelFromJSONTyped, StatusModelFromJ
 import { isProjectMember } from "./openproject-api-gw";
 import type { WebhookBody } from "./webhook-body";
 import Config from "./config";
+import log from "./logger";
 
 export default class OpenProjectAutomations {
 	protected server?: Server;
@@ -21,7 +22,7 @@ export default class OpenProjectAutomations {
 		this.server = Bun.serve({
 			fetch: this.onWebhookRequest.bind(this)
 		});
-		console.log(`Started web server on port ${this.server.port}`);
+		log.info?.(`Started web server on port ${this.server.port}.`);
 	}
 
 	protected async onWebhookRequest(request: Request): Promise<Response> {
@@ -53,13 +54,16 @@ export default class OpenProjectAutomations {
 							}
 						};
 						break;
+					default:
+						log.debug?.(`Ignored webhook action "${json.action}".`);
 				}
 				if(data){
+					log.debug?.("Received webhook request.", {action: data.action, d: data.project.name});
 					this.runAutomations(data);
 				}
 			}
 		} catch(e){
-			console.error("Error while processing webhook request.", e);
+			log.error?.("Error while processing webhook request.", e);
 		}
 		return new Response();
 	}
@@ -69,7 +73,7 @@ export default class OpenProjectAutomations {
 			if(webhook.project.id && await isProjectMember(webhook.project.id))
 				this.automationsManager.run(webhook);
 		} catch(e){
-			console.error("Failed to run automations.", e);
+			log.error?.("Failed to run automations.", e);
 		}
 	}
 }

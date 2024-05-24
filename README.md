@@ -17,6 +17,7 @@ Configure via environment variables:
 - **OPENPROJECT_URL** - URL of your OpenProject instance
 - **API_KEY** - access tokey, generated in your profile settings
 - **BUN_PORT** or **PORT** or **NODE_PORT** - listening port for the webhook (defaults to 3000)
+- **LOG_LEVEL** - minimul level of log messages that will be written to the console (`trace`, `debug`, `info`, `warn` or `error`), default is `info`
 
 Alternatively you can place `config.json` in `custom/` directory.
 
